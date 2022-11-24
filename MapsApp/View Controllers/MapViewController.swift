@@ -113,7 +113,7 @@ class MapViewController: UIViewController {
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             mapView.rightAnchor.constraint(equalTo: view.rightAnchor),
             
-            showPreviousRouteButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            showPreviousRouteButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
             showPreviousRouteButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10),
             showPreviousRouteButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10),
             
