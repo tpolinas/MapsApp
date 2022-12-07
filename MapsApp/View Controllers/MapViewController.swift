@@ -9,11 +9,14 @@ import UIKit
 import MapKit
 import CoreLocation
 import RealmSwift
+import RxSwift
+import RxCocoa
 
 class MapViewController: UIViewController {
     var isTracking = false
     var coordinates: [AnnotationRealm] = []
     var coordinatesFromRealm: Results<AnnotationRealm>?
+    var locationManagerInstance = LocationManager.instance
     
     private(set) lazy var locationManager: CLLocationManager = {
         let manager = CLLocationManager()
@@ -80,6 +83,7 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManagerInstance.configureLocationManager()
         
         mapView.delegate = self
         locationManager.delegate = self
@@ -89,6 +93,9 @@ class MapViewController: UIViewController {
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.startMonitoringSignificantLocationChanges()
         locationManager.pausesLocationUpdatesAutomatically = false
+        
+        _ = locationManagerInstance
+            .location.asObservable().subscribe()
     }
     
     private func configureUI() {

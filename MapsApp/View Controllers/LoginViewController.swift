@@ -8,6 +8,8 @@
 import UIKit
 import Foundation
 import RealmSwift
+import RxSwift
+import RxCocoa
 
 class LoginViewController: UIViewController {
     
@@ -84,6 +86,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureUI()
+        configureLoginBindings()
     }
     
     // MARK: - Private methods
@@ -225,5 +228,23 @@ class LoginViewController: UIViewController {
         alertController.addAction(anotherAction)
         present(alertController, animated: true)
     }
+}
+
+// MARK: - Extensions
+
+extension LoginViewController {
+    func configureLoginBindings() {
+             _ = Observable
+                 .combineLatest(
+                     loginField.rx.text,
+                     passwordField.rx.text
+                 )
+                 .map { login, password in
+                     return !(login ?? "").isEmpty && (password ?? "").count >= 1
+                 }
+                 .bind { [weak signInButton] inputFilled in
+                     signInButton?.isEnabled = inputFilled
+                 }
+         }
 }
 
