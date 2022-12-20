@@ -21,6 +21,7 @@
 		EFDCB1C9292D6C5F00563EF1 /* RealmService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFDCB1C8292D6C5F00563EF1 /* RealmService.swift */; };
 		EFDCB1CB292D757700563EF1 /* RealmAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFDCB1CA292D757700563EF1 /* RealmAnnotation.swift */; };
 		EFE919C32941109900A53223 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFE919C22941109900A53223 /* LocationManager.swift */; };
+		EFF0680B295232DC00651376 /* SelfieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF0680A295232DC00651376 /* SelfieViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		EFDCB1C8292D6C5F00563EF1 /* RealmService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmService.swift; sourceTree = "<group>"; };
 		EFDCB1CA292D757700563EF1 /* RealmAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmAnnotation.swift; sourceTree = "<group>"; };
 		EFE919C22941109900A53223 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		EFF0680A295232DC00651376 /* SelfieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelfieViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 			children = (
 				EFDCB1AA292D4F5600563EF1 /* LoginViewController.swift */,
 				EFDCB1C6292D6AB700563EF1 /* MapViewController.swift */,
+				EFF0680A295232DC00651376 /* SelfieViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				EFDCB1A7292D4F5600563EF1 /* AppDelegate.swift in Sources */,
 				EFDCB1BB292D548700563EF1 /* AppStartManager.swift in Sources */,
 				EFDCB1A9292D4F5600563EF1 /* SceneDelegate.swift in Sources */,
+				EFF0680B295232DC00651376 /* SelfieViewController.swift in Sources */,
 				EFE919C32941109900A53223 /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

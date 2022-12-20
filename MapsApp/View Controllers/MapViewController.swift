@@ -17,6 +17,7 @@ class MapViewController: UIViewController {
     var coordinates: [AnnotationRealm] = []
     var coordinatesFromRealm: Results<AnnotationRealm>?
     var locationManagerInstance = LocationManager.instance
+    var onTakePicture: ((UIImage) -> Void)?
     
     private(set) lazy var locationManager: CLLocationManager = {
         let manager = CLLocationManager()
@@ -79,6 +80,20 @@ class MapViewController: UIViewController {
         return button
     }()
     
+    private(set) lazy var setPhotoButton: UIButton = {
+        var button = UIButton(configuration: UIButton.Configuration.borderedTinted())
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .black
+        button.setTitle("Set Photo", for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.addTarget(
+            self,
+            action: #selector(self.takeAPhoto),
+            for: .touchUpInside)
+        
+        return button
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -111,6 +126,7 @@ class MapViewController: UIViewController {
         self.view.addSubview(mapView)
         self.view.addSubview(showPreviousRouteButton)
         self.view.addSubview(exitButton)
+        self.view.addSubview(setPhotoButton)
     }
     
     private func configureConstraints() {
@@ -127,7 +143,12 @@ class MapViewController: UIViewController {
             exitButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -25),
             exitButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             exitButton.widthAnchor.constraint(equalToConstant: 70),
-            exitButton.heightAnchor.constraint(equalToConstant: 30)
+            exitButton.heightAnchor.constraint(equalToConstant: 30),
+            
+            setPhotoButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -70),
+            setPhotoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            setPhotoButton.heightAnchor.constraint(equalToConstant: 50),
+            setPhotoButton.widthAnchor.constraint(equalToConstant: 70)
         ])
     }
     
@@ -270,6 +291,16 @@ class MapViewController: UIViewController {
     @objc func getBack() {
         self.navigationController?.popViewController(animated: true)
     }
+    
+    @objc func takeAPhoto() {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else { return }
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .camera
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
+        
+        present(imagePickerController, animated: true)
+    }
 }
 
     // MARK: - Extensions
@@ -304,6 +335,44 @@ extension MapViewController: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         if manager.authorizationStatus == .authorizedAlways || manager.authorizationStatus == .authorizedWhenInUse {
             locationManager.startUpdatingLocation()
+        }
+    }
+}
+
+extension MapViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = extractImage(from: info)
+        print(image!)
+        picker.dismiss(animated: true) { [weak self] in
+            guard let image = self?.extractImage(from: info) else { return }
+            self?.onTakePicture!(image)
+        }
+    }
+    
+    private func extractImage(from info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            return image
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            return image
+        } else {
+            return nil
+        }
+    }
+    
+    private func showSelfieModule(image: UIImage) {
+        let nextVC = SelfieViewController()
+        nextVC.image = image
+        nextVC.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    private func showPreviousModule() {
+        let previousVC = MapViewController()
+        previousVC.onTakePicture = { [weak self] image in
+            self?.showSelfieModule(image: image)
         }
     }
 }
